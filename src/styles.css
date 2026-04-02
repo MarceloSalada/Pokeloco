@@ -1,19 +1,19 @@
 :root {
-  --bg: #09060f;
-  --bg-2: #150b26;
-  --bg-3: #25113d;
+  --bg: #08050d;
+  --bg-2: #13081f;
+  --bg-3: #221037;
   --gold: #ffcb56;
-  --gold-strong: #ffb600;
-  --gold-soft: rgba(255, 203, 86, 0.18);
+  --gold-strong: #ffb700;
+  --gold-soft: rgba(255, 203, 86, 0.16);
   --purple: #b36cff;
-  --purple-soft: rgba(179, 108, 255, 0.18);
+  --purple-soft: rgba(179, 108, 255, 0.14);
   --white: #ffffff;
-  --text: #f5ecff;
-  --muted: #cdb9e9;
-  --line: rgba(255, 255, 255, 0.1);
-  --panel: rgba(21, 12, 33, 0.82);
-  --panel-2: rgba(33, 18, 50, 0.92);
-  --shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --text: #f8f2ff;
+  --muted: #d5c6ec;
+  --line: rgba(255, 255, 255, 0.08);
+  --panel: rgba(20, 11, 31, 0.82);
+  --panel-2: rgba(28, 14, 44, 0.9);
+  --shadow: 0 18px 40px rgba(0, 0, 0, 0.34);
 }
 
 * {
@@ -27,7 +27,7 @@ body,
 }
 
 html {
-  background: #050309;
+  background: #040208;
 }
 
 body {
@@ -35,10 +35,10 @@ body {
   font-family: Arial, sans-serif;
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(255, 179, 0, 0.16), transparent 28%),
-    radial-gradient(circle at top right, rgba(182, 102, 255, 0.2), transparent 32%),
-    radial-gradient(circle at bottom left, rgba(255, 126, 29, 0.12), transparent 30%),
-    linear-gradient(180deg, #050309 0%, #13091d 45%, #07040d 100%);
+    radial-gradient(circle at 12% 18%, rgba(255, 175, 40, 0.12), transparent 18%),
+    radial-gradient(circle at 88% 15%, rgba(176, 93, 255, 0.16), transparent 20%),
+    radial-gradient(circle at 24% 82%, rgba(255, 170, 0, 0.06), transparent 16%),
+    linear-gradient(180deg, #05030a 0%, #14091f 45%, #06030a 100%);
 }
 
 button,
@@ -60,10 +60,10 @@ button {
   inset: 0;
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 20%, rgba(255, 184, 74, 0.14), transparent 18%),
-    radial-gradient(circle at 82% 18%, rgba(171, 92, 255, 0.18), transparent 22%),
-    radial-gradient(circle at 25% 75%, rgba(255, 153, 0, 0.08), transparent 18%),
-    radial-gradient(circle at 88% 75%, rgba(186, 113, 255, 0.1), transparent 20%);
+    radial-gradient(circle at 16% 24%, rgba(255, 194, 87, 0.1), transparent 22%),
+    radial-gradient(circle at 82% 22%, rgba(171, 92, 255, 0.13), transparent 24%),
+    radial-gradient(circle at 22% 76%, rgba(255, 153, 0, 0.05), transparent 20%),
+    radial-gradient(circle at 84% 78%, rgba(171, 92, 255, 0.07), transparent 20%);
   z-index: 0;
 }
 
@@ -71,46 +71,49 @@ button {
   position: sticky;
   top: 0;
   z-index: 10;
-  backdrop-filter: blur(12px);
-  background: linear-gradient(180deg, rgba(12, 7, 20, 0.92) 0%, rgba(12, 7, 20, 0.72) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(14px);
+  background: linear-gradient(180deg, rgba(9, 5, 16, 0.92) 0%, rgba(9, 5, 16, 0.7) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.24);
 }
 
 .header-inner {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 14px 16px;
+  padding: 16px 16px;
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 16px;
   position: relative;
   z-index: 1;
 }
 
 .brand-logo {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-  border-radius: 18px;
+  width: 82px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 212, 98, 0.2);
   box-shadow:
-    0 0 28px rgba(255, 196, 0, 0.25),
-    0 0 36px rgba(164, 103, 255, 0.18);
+    0 0 26px rgba(255, 193, 76, 0.16),
+    0 0 32px rgba(171, 92, 255, 0.1);
   flex: 0 0 auto;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .brand-copy h1 {
   margin: 0;
-  font-size: 30px;
+  font-size: 32px;
   line-height: 1;
   color: var(--gold);
+  letter-spacing: -0.02em;
   text-shadow:
-    0 0 14px rgba(255, 196, 0, 0.2),
-    0 0 22px rgba(196, 122, 255, 0.12);
+    0 0 14px rgba(255, 203, 86, 0.12),
+    0 0 18px rgba(171, 92, 255, 0.06);
 }
 
 .brand-copy p {
-  margin: 6px 0 0;
+  margin: 7px 0 0;
   color: var(--muted);
   font-size: 14px;
 }
@@ -118,7 +121,7 @@ button {
 .layout {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 22px 16px 28px;
+  padding: 22px 16px 30px;
   display: grid;
   grid-template-columns: 390px minmax(0, 1fr);
   gap: 18px;
@@ -133,17 +136,16 @@ button {
 
 .panel {
   position: relative;
-  border-radius: 28px;
+  border-radius: 30px;
 }
 
 .premium-panel {
   background:
-    linear-gradient(180deg, rgba(41, 19, 63, 0.94) 0%, rgba(20, 11, 32, 0.96) 100%);
-  border: 1px solid rgba(255, 214, 102, 0.12);
+    linear-gradient(180deg, rgba(34, 16, 53, 0.9) 0%, rgba(17, 9, 27, 0.95) 100%);
+  border: 1px solid rgba(255, 214, 102, 0.08);
   box-shadow:
     var(--shadow),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(171, 92, 255, 0.06);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.025);
   overflow: hidden;
 }
 
@@ -152,10 +154,10 @@ button {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  border-radius: 28px;
+  border-radius: 30px;
   background:
-    radial-gradient(circle at top left, rgba(255, 198, 85, 0.11), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(171, 92, 255, 0.1), transparent 34%);
+    radial-gradient(circle at top left, rgba(255, 203, 86, 0.08), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(171, 92, 255, 0.08), transparent 32%);
 }
 
 .search-panel,
@@ -173,26 +175,24 @@ button {
 
 .search-row input {
   width: 100%;
-  padding: 14px 16px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(8, 5, 15, 0.55);
+  padding: 15px 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(10, 6, 17, 0.74);
   outline: none;
   color: var(--white);
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 199, 93, 0.04),
-    0 0 0 1px rgba(157, 89, 255, 0.04);
+  box-shadow: inset 0 0 0 1px rgba(255, 192, 72, 0.02);
 }
 
 .search-row input::placeholder {
-  color: #c7b3e1;
+  color: #cdbfe0;
 }
 
 .search-row input:focus {
-  border-color: rgba(255, 200, 92, 0.45);
+  border-color: rgba(255, 201, 87, 0.3);
   box-shadow:
-    0 0 0 3px rgba(255, 190, 62, 0.12),
-    0 0 24px rgba(171, 92, 255, 0.12);
+    0 0 0 3px rgba(255, 189, 64, 0.08),
+    0 0 20px rgba(171, 92, 255, 0.08);
 }
 
 .search-row button,
@@ -207,13 +207,11 @@ button {
 }
 
 .search-row button {
-  border-radius: 20px;
-  background: linear-gradient(180deg, #ffcf62 0%, #ffb100 100%);
-  color: #2f1700;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffd363 0%, #ffb300 100%);
+  color: #2d1800;
   font-weight: 800;
-  box-shadow:
-    0 12px 28px rgba(255, 184, 0, 0.22),
-    0 0 20px rgba(255, 196, 80, 0.12);
+  box-shadow: 0 10px 22px rgba(255, 185, 0, 0.16);
 }
 
 .tab-row {
@@ -226,25 +224,25 @@ button {
 .tab {
   padding: 12px 18px;
   border-radius: 999px;
-  background: rgba(17, 8, 28, 0.75);
-  color: #e6d5ff;
+  background: rgba(15, 8, 24, 0.7);
+  color: #e7daf8;
   font-weight: 700;
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .tab.active {
-  background: linear-gradient(90deg, rgba(255, 178, 34, 0.95) 0%, rgba(154, 88, 255, 0.92) 100%);
-  color: #fff6df;
+  background: linear-gradient(90deg, rgba(255, 188, 58, 0.95) 0%, rgba(174, 101, 255, 0.92) 100%);
+  color: #fff8e8;
   box-shadow:
-    0 0 24px rgba(255, 184, 0, 0.18),
-    0 0 18px rgba(171, 92, 255, 0.12);
+    0 0 18px rgba(255, 184, 0, 0.12),
+    0 0 12px rgba(171, 92, 255, 0.08);
 }
 
 .collection-summary strong {
   display: block;
   font-size: 30px;
   color: var(--gold);
-  text-shadow: 0 0 18px rgba(255, 195, 69, 0.18);
+  text-shadow: 0 0 12px rgba(255, 195, 69, 0.12);
 }
 
 .meta-label {
@@ -264,32 +262,31 @@ button {
 .premium-card {
   width: 100%;
   display: grid;
-  grid-template-columns: 82px minmax(0, 1fr) 32px;
+  grid-template-columns: 88px minmax(0, 1fr) 32px;
   gap: 14px;
   align-items: center;
   text-align: left;
   padding: 14px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 204, 102, 0.11);
+  border-radius: 26px;
+  border: 1px solid rgba(255, 204, 102, 0.08);
   background:
-    linear-gradient(180deg, rgba(29, 13, 47, 0.96) 0%, rgba(18, 9, 31, 0.96) 100%);
+    linear-gradient(180deg, rgba(25, 12, 40, 0.96) 0%, rgba(14, 8, 24, 0.96) 100%);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.03),
-    0 0 0 1px rgba(179, 108, 255, 0.04);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .premium-card.selected {
-  border-color: rgba(255, 201, 87, 0.45);
+  border-color: rgba(255, 201, 87, 0.25);
   box-shadow:
-    0 0 0 1px rgba(255, 202, 90, 0.18),
-    0 0 24px rgba(171, 92, 255, 0.12);
+    0 0 0 1px rgba(255, 202, 90, 0.08),
+    0 0 18px rgba(171, 92, 255, 0.08);
 }
 
 .premium-card img {
-  width: 82px;
-  border-radius: 12px;
+  width: 88px;
+  border-radius: 14px;
   display: block;
-  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
 }
 
 .catalog-card-body {
@@ -299,18 +296,18 @@ button {
 }
 
 .catalog-card-body strong {
-  font-size: 16px;
+  font-size: 17px;
   color: var(--white);
 }
 
 .catalog-card-body span {
   font-size: 13px;
-  color: #cdb9e9;
-  line-height: 1.3;
+  color: #d5c8ea;
+  line-height: 1.32;
 }
 
 .fav {
-  color: rgba(255, 235, 181, 0.42);
+  color: rgba(255, 235, 181, 0.35);
   font-size: 24px;
   line-height: 1;
   user-select: none;
@@ -318,9 +315,7 @@ button {
 
 .fav.active {
   color: var(--gold);
-  text-shadow:
-    0 0 10px rgba(255, 203, 86, 0.22),
-    0 0 18px rgba(255, 203, 86, 0.18);
+  text-shadow: 0 0 12px rgba(255, 203, 86, 0.16);
 }
 
 .quantity-badge,
@@ -333,13 +328,13 @@ button {
 }
 
 .quantity-badge {
-  background: rgba(82, 149, 255, 0.14);
-  color: #9dc8ff !important;
+  background: rgba(82, 149, 255, 0.12);
+  color: #a9ceff !important;
 }
 
 .subtotal-badge {
-  background: rgba(255, 203, 86, 0.12);
-  color: #ffd978 !important;
+  background: rgba(255, 203, 86, 0.1);
+  color: #ffdf8b !important;
 }
 
 .inline-qty-actions {
@@ -352,7 +347,7 @@ button {
 .qty-button {
   background: rgba(255, 255, 255, 0.06);
   color: var(--white);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .mini-qty-button {
@@ -371,8 +366,8 @@ button {
 
 .mini-qty-button.primary,
 .qty-button.primary {
-  background: linear-gradient(180deg, #ffcf62 0%, #ffb100 100%);
-  color: #2b1900;
+  background: linear-gradient(180deg, #ffd363 0%, #ffb300 100%);
+  color: #2b1700;
   border: none;
 }
 
@@ -394,8 +389,8 @@ button {
   display: block;
   margin: 0 auto;
   box-shadow:
-    0 20px 40px rgba(0, 0, 0, 0.35),
-    0 0 24px rgba(255, 184, 0, 0.1);
+    0 18px 36px rgba(0, 0, 0, 0.34),
+    0 0 16px rgba(255, 184, 0, 0.06);
 }
 
 .detail-info {
@@ -420,26 +415,26 @@ button {
 .title-row h2 {
   margin: 0;
   font-size: 36px;
-  line-height: 1.02;
+  line-height: 1.03;
   color: var(--gold);
   text-shadow:
-    0 0 16px rgba(255, 203, 86, 0.12),
-    0 0 18px rgba(171, 92, 255, 0.08);
+    0 0 12px rgba(255, 203, 86, 0.08),
+    0 0 10px rgba(171, 92, 255, 0.05);
 }
 
 .favorite-button {
   border-radius: 16px;
   padding: 10px 14px;
   font-weight: 800;
-  background: linear-gradient(180deg, #ffcf62 0%, #ffb100 100%);
+  background: linear-gradient(180deg, #ffd363 0%, #ffb300 100%);
   color: #2c1600;
-  box-shadow: 0 12px 24px rgba(255, 184, 0, 0.18);
+  box-shadow: 0 10px 20px rgba(255, 184, 0, 0.14);
 }
 
 .favorite-button.active {
   background: linear-gradient(180deg, #d979ff 0%, #9e57ff 100%);
   color: #fff;
-  box-shadow: 0 12px 24px rgba(171, 92, 255, 0.18);
+  box-shadow: 0 10px 20px rgba(171, 92, 255, 0.14);
 }
 
 .collection-box,
@@ -447,10 +442,10 @@ button {
 .meta-box,
 .attack-card {
   border-radius: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   background:
-    linear-gradient(180deg, rgba(31, 14, 48, 0.96) 0%, rgba(17, 9, 28, 0.96) 100%);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+    linear-gradient(180deg, rgba(25, 12, 40, 0.96) 0%, rgba(14, 8, 24, 0.96) 100%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.015);
 }
 
 .collection-box {
@@ -479,10 +474,10 @@ button {
 }
 
 .price-box-priority {
-  border-color: rgba(255, 203, 86, 0.18);
+  border-color: rgba(255, 203, 86, 0.12);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 203, 86, 0.03),
-    0 0 24px rgba(255, 203, 86, 0.06);
+    inset 0 0 0 1px rgba(255, 203, 86, 0.02),
+    0 0 18px rgba(255, 203, 86, 0.04);
 }
 
 .hero-price {
@@ -515,8 +510,8 @@ button {
 
 .price-mini {
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .price-mini span {
@@ -538,12 +533,12 @@ button {
 .attack-card p,
 .status-text {
   margin: 0;
-  color: #d7c8ef;
+  color: #ded1f1;
   line-height: 1.45;
 }
 
 .status-text.error {
-  color: #ff8f8f;
+  color: #ff9ea4;
 }
 
 .attacks-panel {
@@ -585,12 +580,12 @@ button {
 
 .premium-sheet {
   background:
-    linear-gradient(180deg, rgba(29, 14, 46, 0.98) 0%, rgba(13, 7, 21, 0.98) 100%);
+    linear-gradient(180deg, rgba(25, 12, 40, 0.98) 0%, rgba(11, 6, 18, 0.98) 100%);
   color: var(--text);
 }
 
 .mobile-back {
-  background: linear-gradient(180deg, #ffcf62 0%, #ffb100 100%);
+  background: linear-gradient(180deg, #ffd363 0%, #ffb300 100%);
   color: #2b1700;
   padding: 10px 14px;
   font-weight: 800;
@@ -610,7 +605,7 @@ button {
     display: flex;
     position: fixed;
     inset: 0;
-    background: rgba(4, 2, 7, 0.7);
+    background: rgba(4, 2, 7, 0.72);
     z-index: 30;
     padding: 12px;
     align-items: flex-end;
@@ -642,11 +637,13 @@ button {
 @media (max-width: 720px) {
   .header-inner {
     padding: 12px 14px;
+    gap: 12px;
   }
 
   .brand-logo {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
   }
 
   .brand-copy h1 {
@@ -680,12 +677,13 @@ button {
   }
 
   .premium-card {
-    grid-template-columns: 74px minmax(0, 1fr) 24px;
-    border-radius: 20px;
+    grid-template-columns: 80px minmax(0, 1fr) 24px;
+    padding: 14px;
+    border-radius: 22px;
   }
 
   .premium-card img {
-    width: 74px;
+    width: 80px;
   }
 
   .collection-box {
@@ -696,4 +694,4 @@ button {
   .collection-actions {
     justify-content: flex-end;
   }
-  }
+                                   }
