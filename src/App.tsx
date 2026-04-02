@@ -14,6 +14,10 @@ type CardPrices = {
   directLow?: number
 }
 
+type CollectionEntry = {
+  quantity: number
+}
+
 type PokemonCard = {
   id: string
   name: string
@@ -46,9 +50,10 @@ type PokemonCard = {
   }
 }
 
-type ViewMode = 'browse' | 'favorites'
+type ViewMode = 'browse' | 'favorites' | 'collection'
 
 const FAVORITES_KEY = 'pokeloco:favorites'
+const COLLECTION_KEY = 'pokeloco:collection'
 
 function formatUsd(value?: number) {
   if (typeof value !== 'number') return '—'
@@ -102,12 +107,18 @@ export default function App() {
   const [error, setError] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('browse')
   const [favorites, setFavorites] = useState<string[]>([])
+  const [collection, setCollection] = useState<Record<string, CollectionEntry>>({})
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem(FAVORITES_KEY)
-    if (saved) {
-      setFavorites(JSON.parse(saved))
+    const savedFavorites = localStorage.getItem(FAVORITES_KEY)
+    if (savedFavorites) {
+      setFavorites(JSON.parse(savedFavorites))
+    }
+
+    const savedCollection = localStorage.getItem(COLLECTION_KEY)
+    if (savedCollection) {
+      setCollection(JSON.parse(savedCollection))
     }
   }, [])
 
@@ -120,6 +131,11 @@ export default function App() {
     localStorage.setItem(FAVORITES_KEY, JSON.stringify(next))
   }
 
+  function persistCollection(next: Record<string, CollectionEntry>) {
+    setCollection(next)
+    localStorage.setItem(COLLECTION_KEY, JSON.stringify(next))
+  }
+
   function toggleFavorite(cardId: string) {
     const exists = favorites.includes(cardId)
     const next = exists
@@ -127,6 +143,31 @@ export default function App() {
       : [...favorites, cardId]
 
     persistFavorites(next)
+  }
+
+  function addToCollection(cardId: string) {
+    const current = collection[cardId]?.quantity ?? 0
+    const next = {
+      ...collection,
+      [cardId]: { quantity: current + 1 },
+    }
+    persistCollection(next)
+  }
+
+  function decreaseFromCollection(cardId: string) {
+    const current = collection[cardId]?.quantity ?? 0
+    if (current <= 1) {
+      const next = { ...collection }
+      delete next[cardId]
+      persistCollection(next)
+      return
+    }
+
+    const next = {
+      ...collection,
+      [cardId]: { quantity: current - 1 },
+    }
+    persistCollection(next)
   }
 
   async function runSearch(term?: string) {
@@ -153,12 +194,30 @@ export default function App() {
     }
   }
 
+  const collectionCards = useMemo(() => {
+    return cards.filter((card) => collection[card.id])
+  }, [cards, collection])
+
   const visibleCards = useMemo(() => {
     if (viewMode === 'favorites') {
       return cards.filter((card) => favorites.includes(card.id))
     }
+
+    if (viewMode === 'collection') {
+      return collectionCards
+    }
+
     return cards
-  }, [cards, favorites, viewMode])
+  }, [cards, favorites, collectionCards, viewMode])
+
+  const collectionTotal = useMemo(() => {
+    return collectionCards.reduce((sum, card) => {
+      const quantity = collection[card.id]?.quantity ?? 0
+      const priceInfo = getPriceInfo(card)
+      const unit = priceInfo?.market ?? priceInfo?.mid ?? priceInfo?.low ?? 0
+      return sum + unit * quantity
+    }, 0)
+  }, [collectionCards, collection])
 
   function openCard(card: PokemonCard) {
     setSelectedCard(card)
@@ -167,6 +226,7 @@ export default function App() {
 
   function renderDetail(card: PokemonCard) {
     const priceInfo = getPriceInfo(card)
+    const quantity = collection[card.id]?.quantity ?? 0
 
     return (
       <>
@@ -187,6 +247,22 @@ export default function App() {
               >
                 {favorites.includes(card.id) ? 'Favorita' : 'Favoritar'}
               </button>
+            </div>
+
+            <div className="collection-box">
+              <div>
+                <span className="meta-label">Minha coleção</span>
+                <strong>{quantity > 0 ? `${quantity} unidade(s)` : 'Ainda não adicionada'}</strong>
+              </div>
+
+              <div className="collection-actions">
+                <button className="qty-button" onClick={() => decreaseFromCollection(card.id)}>
+                  −
+                </button>
+                <button className="qty-button primary" onClick={() => addToCollection(card.id)}>
+                  +
+                </button>
+              </div>
             </div>
 
             <div className="price-box price-box-priority">
@@ -299,7 +375,7 @@ export default function App() {
           <div className="pokeball-dot" />
           <div>
             <h1>Pokeloco</h1>
-            <p>Catálogo de cartas + favoritos</p>
+            <p>Catálogo de cartas + favoritos + coleção</p>
           </div>
         </div>
       </header>
@@ -330,21 +406,40 @@ export default function App() {
               >
                 Favoritas
               </button>
+
+              <button
+                className={viewMode === 'collection' ? 'tab active' : 'tab'}
+                onClick={() => setViewMode('collection')}
+              >
+                Coleção
+              </button>
             </div>
           </div>
+
+          {viewMode === 'collection' && (
+            <div className="panel collection-summary">
+              <span className="meta-label">Valor estimado da coleção</span>
+              <strong>{formatUsd(collectionTotal)}</strong>
+            </div>
+          )}
 
           <div className="panel list-panel">
             {loading && <p className="status-text">Carregando cartas...</p>}
             {error && <p className="status-text error">{error}</p>}
 
             {!loading && !error && visibleCards.length === 0 && (
-              <p className="status-text">Nenhuma carta encontrada.</p>
+              <p className="status-text">
+                {viewMode === 'collection'
+                  ? 'Sua coleção está vazia.'
+                  : 'Nenhuma carta encontrada.'}
+              </p>
             )}
 
             <div className="card-grid">
               {visibleCards.map((card) => {
                 const isFavorite = favorites.includes(card.id)
                 const isSelected = selectedCard?.id === card.id
+                const quantity = collection[card.id]?.quantity ?? 0
 
                 return (
                   <button
@@ -358,6 +453,7 @@ export default function App() {
                       <strong>{card.name}</strong>
                       <span>{card.set.name}</span>
                       <span>{card.rarity || 'Raridade não informada'}</span>
+                      {quantity > 0 && <span className="quantity-badge">Na coleção: {quantity}</span>}
                     </div>
 
                     <span
@@ -413,4 +509,4 @@ export default function App() {
       )}
     </div>
   )
-                  }
+}
