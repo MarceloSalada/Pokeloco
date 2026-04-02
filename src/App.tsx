@@ -1,5 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 
+type Attack = {
+  name: string
+  damage?: string
+  text?: string
+}
+
+type CardPrices = {
+  low?: number
+  mid?: number
+  high?: number
+  market?: number
+  directLow?: number
+}
+
 type PokemonCard = {
   id: string
   name: string
@@ -14,16 +28,69 @@ type PokemonCard = {
     series?: string
   }
   types?: string[]
-  attacks?: Array<{
-    name: string
-    damage?: string
-    text?: string
-  }>
+  attacks?: Attack[]
+  tcgplayer?: {
+    updatedAt?: string
+    prices?: Record<string, CardPrices>
+  }
+  cardmarket?: {
+    updatedAt?: string
+    prices?: {
+      averageSellPrice?: number
+      lowPrice?: number
+      trendPrice?: number
+      reverseHoloSell?: number
+      reverseHoloLow?: number
+      reverseHoloTrend?: number
+    }
+  }
 }
 
 type ViewMode = 'browse' | 'favorites'
 
 const FAVORITES_KEY = 'pokeloco:favorites'
+
+function formatUsd(value?: number) {
+  if (typeof value !== 'number') return '—'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value)
+}
+
+function getPriceInfo(card: PokemonCard) {
+  const tcgPrices = card.tcgplayer?.prices
+  if (tcgPrices) {
+    const entries = Object.entries(tcgPrices)
+    if (entries.length > 0) {
+      const [variant, prices] = entries[0]
+      return {
+        source: 'TCGplayer',
+        variant,
+        market: prices.market,
+        low: prices.low,
+        mid: prices.mid,
+        high: prices.high,
+        updatedAt: card.tcgplayer?.updatedAt,
+      }
+    }
+  }
+
+  const cm = card.cardmarket?.prices
+  if (cm) {
+    return {
+      source: 'Cardmarket',
+      variant: 'standard',
+      market: cm.averageSellPrice,
+      low: cm.lowPrice,
+      mid: cm.trendPrice,
+      high: undefined,
+      updatedAt: card.cardmarket?.updatedAt,
+    }
+  }
+
+  return null
+}
 
 export default function App() {
   const [query, setQuery] = useState('pikachu')
@@ -90,6 +157,8 @@ export default function App() {
   }
 
   function renderDetail(card: PokemonCard) {
+    const priceInfo = getPriceInfo(card)
+
     return (
       <>
         <div className="detail-hero">
@@ -126,8 +195,50 @@ export default function App() {
 
             <div className="price-box">
               <span className="meta-label">Preço de referência</span>
-              <strong>Próxima etapa</strong>
-              <p>Vamos adicionar fonte, preço médio e faixa de preço da carta na próxima atualização.</p>
+
+              {priceInfo ? (
+                <>
+                  <strong>{formatUsd(priceInfo.market ?? priceInfo.mid ?? priceInfo.low)}</strong>
+
+                  <div className="price-grid">
+                    <div className="price-mini">
+                      <span>Fonte</span>
+                      <strong>{priceInfo.source}</strong>
+                    </div>
+                    <div className="price-mini">
+                      <span>Variação</span>
+                      <strong>{priceInfo.variant}</strong>
+                    </div>
+                    <div className="price-mini">
+                      <span>Low</span>
+                      <strong>{formatUsd(priceInfo.low)}</strong>
+                    </div>
+                    <div className="price-mini">
+                      <span>Mid</span>
+                      <strong>{formatUsd(priceInfo.mid)}</strong>
+                    </div>
+                    <div className="price-mini">
+                      <span>High</span>
+                      <strong>{formatUsd(priceInfo.high)}</strong>
+                    </div>
+                    <div className="price-mini">
+                      <span>Market</span>
+                      <strong>{formatUsd(priceInfo.market)}</strong>
+                    </div>
+                  </div>
+
+                  <p className="price-note">
+                    Preço de referência de mercado. O valor real pode variar conforme condição, edição e versão da carta.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <strong>Sem preço disponível</strong>
+                  <p className="price-note">
+                    Esta carta não trouxe referência de preço na fonte atual.
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -261,4 +372,4 @@ export default function App() {
       )}
     </div>
   )
-                        }
+    }
