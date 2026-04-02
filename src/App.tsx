@@ -60,10 +60,12 @@ function formatUsd(value?: number) {
 
 function getPriceInfo(card: PokemonCard) {
   const tcgPrices = card.tcgplayer?.prices
+
   if (tcgPrices) {
     const entries = Object.entries(tcgPrices)
     if (entries.length > 0) {
       const [variant, prices] = entries[0]
+
       return {
         source: 'TCGplayer',
         variant,
@@ -104,7 +106,9 @@ export default function App() {
 
   useEffect(() => {
     const saved = localStorage.getItem(FAVORITES_KEY)
-    if (saved) setFavorites(JSON.parse(saved))
+    if (saved) {
+      setFavorites(JSON.parse(saved))
+    }
   }, [])
 
   useEffect(() => {
@@ -118,7 +122,11 @@ export default function App() {
 
   function toggleFavorite(cardId: string) {
     const exists = favorites.includes(cardId)
-    persistFavorites(exists ? favorites.filter((id) => id !== cardId) : [...favorites, cardId])
+    const next = exists
+      ? favorites.filter((id) => id !== cardId)
+      : [...favorites, cardId]
+
+    persistFavorites(next)
   }
 
   async function runSearch(term?: string) {
@@ -134,6 +142,7 @@ export default function App() {
       )
       const data = await response.json()
       const nextCards = data?.data ?? []
+
       setCards(nextCards)
       setSelectedCard(nextCards[0] ?? null)
       setMobileDetailOpen(false)
@@ -163,11 +172,17 @@ export default function App() {
       <>
         <div className="detail-hero">
           <img src={card.images.large} alt={card.name} />
+
           <div className="detail-info">
             <div className="title-row">
               <h2>{card.name}</h2>
+
               <button
-                className={favorites.includes(card.id) ? 'favorite-button active' : 'favorite-button'}
+                className={
+                  favorites.includes(card.id)
+                    ? 'favorite-button active'
+                    : 'favorite-button'
+                }
                 onClick={() => toggleFavorite(card.id)}
               >
                 {favorites.includes(card.id) ? 'Favorita' : 'Favoritar'}
@@ -179,29 +194,36 @@ export default function App() {
 
               {priceInfo ? (
                 <>
-                  <strong>{formatUsd(priceInfo.market ?? priceInfo.mid ?? priceInfo.low)}</strong>
+                  <strong>
+                    {formatUsd(priceInfo.market ?? priceInfo.mid ?? priceInfo.low)}
+                  </strong>
 
                   <div className="price-grid">
                     <div className="price-mini">
                       <span>Fonte</span>
                       <strong>{priceInfo.source}</strong>
                     </div>
+
                     <div className="price-mini">
                       <span>Variação</span>
                       <strong>{priceInfo.variant}</strong>
                     </div>
+
                     <div className="price-mini">
                       <span>Low</span>
                       <strong>{formatUsd(priceInfo.low)}</strong>
                     </div>
+
                     <div className="price-mini">
                       <span>Mid</span>
                       <strong>{formatUsd(priceInfo.mid)}</strong>
                     </div>
+
                     <div className="price-mini">
                       <span>High</span>
                       <strong>{formatUsd(priceInfo.high)}</strong>
                     </div>
+
                     <div className="price-mini">
                       <span>Market</span>
                       <strong>{formatUsd(priceInfo.market)}</strong>
@@ -209,7 +231,8 @@ export default function App() {
                   </div>
 
                   <p className="price-note">
-                    Preço de referência de mercado. O valor real pode variar conforme condição, edição e versão da carta.
+                    Preço de referência de mercado. O valor real pode variar
+                    conforme condição, edição e versão da carta.
                   </p>
                 </>
               ) : (
@@ -227,14 +250,17 @@ export default function App() {
                 <span className="meta-label">Set</span>
                 <strong>{card.set.name}</strong>
               </div>
+
               <div className="meta-box">
                 <span className="meta-label">Raridade</span>
                 <strong>{card.rarity || 'Não informada'}</strong>
               </div>
+
               <div className="meta-box">
                 <span className="meta-label">HP</span>
                 <strong>{card.hp || '—'}</strong>
               </div>
+
               <div className="meta-box">
                 <span className="meta-label">Tipo</span>
                 <strong>{card.types?.join(', ') || '—'}</strong>
@@ -245,6 +271,7 @@ export default function App() {
 
         <div className="attacks-panel">
           <h3>Ataques</h3>
+
           {card.attacks?.length ? (
             <div className="attack-list">
               {card.attacks.map((attack) => (
@@ -296,6 +323,7 @@ export default function App() {
               >
                 Catálogo
               </button>
+
               <button
                 className={viewMode === 'favorites' ? 'tab active' : 'tab'}
                 onClick={() => setViewMode('favorites')}
@@ -308,6 +336,7 @@ export default function App() {
           <div className="panel list-panel">
             {loading && <p className="status-text">Carregando cartas...</p>}
             {error && <p className="status-text error">{error}</p>}
+
             {!loading && !error && visibleCards.length === 0 && (
               <p className="status-text">Nenhuma carta encontrada.</p>
             )}
@@ -324,11 +353,13 @@ export default function App() {
                     onClick={() => openCard(card)}
                   >
                     <img src={card.images.small} alt={card.name} />
+
                     <div className="catalog-card-body">
                       <strong>{card.name}</strong>
                       <span>{card.set.name}</span>
                       <span>{card.rarity || 'Raridade não informada'}</span>
                     </div>
+
                     <span
                       className={isFavorite ? 'fav active' : 'fav'}
                       onClick={(e) => {
@@ -359,17 +390,27 @@ export default function App() {
       </main>
 
       {mobileDetailOpen && selectedCard && (
-        <div className="mobile-detail-overlay" onClick={() => setMobileDetailOpen(false)}>
-          <div className="mobile-detail-sheet" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="mobile-detail-overlay"
+          onClick={() => setMobileDetailOpen(false)}
+        >
+          <div
+            className="mobile-detail-sheet"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mobile-detail-top">
-              <button className="mobile-back" onClick={() => setMobileDetailOpen(false)}>
+              <button
+                className="mobile-back"
+                onClick={() => setMobileDetailOpen(false)}
+              >
                 ← Voltar
               </button>
             </div>
+
             {renderDetail(selectedCard)}
           </div>
         </div>
       )}
     </div>
   )
-      }
+                  }
