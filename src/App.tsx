@@ -54,6 +54,7 @@ type ViewMode = 'browse' | 'favorites' | 'collection'
 
 const FAVORITES_KEY = 'pokeloco:favorites'
 const COLLECTION_KEY = 'pokeloco:collection'
+const LOGO_PATH = '/file_000000006e34720ebef0397bd36c8c5f.png'
 
 function formatUsd(value?: number) {
   if (typeof value !== 'number') return '—'
@@ -70,7 +71,6 @@ function getPriceInfo(card: PokemonCard) {
     const entries = Object.entries(tcgPrices)
     if (entries.length > 0) {
       const [variant, prices] = entries[0]
-
       return {
         source: 'TCGplayer',
         variant,
@@ -78,7 +78,6 @@ function getPriceInfo(card: PokemonCard) {
         low: prices.low,
         mid: prices.mid,
         high: prices.high,
-        updatedAt: card.tcgplayer?.updatedAt,
       }
     }
   }
@@ -92,7 +91,6 @@ function getPriceInfo(card: PokemonCard) {
       low: cm.lowPrice,
       mid: cm.trendPrice,
       high: undefined,
-      updatedAt: card.cardmarket?.updatedAt,
     }
   }
 
@@ -112,14 +110,10 @@ export default function App() {
 
   useEffect(() => {
     const savedFavorites = localStorage.getItem(FAVORITES_KEY)
-    if (savedFavorites) {
-      setFavorites(JSON.parse(savedFavorites))
-    }
+    if (savedFavorites) setFavorites(JSON.parse(savedFavorites))
 
     const savedCollection = localStorage.getItem(COLLECTION_KEY)
-    if (savedCollection) {
-      setCollection(JSON.parse(savedCollection))
-    }
+    if (savedCollection) setCollection(JSON.parse(savedCollection))
   }, [])
 
   useEffect(() => {
@@ -147,11 +141,10 @@ export default function App() {
 
   function addToCollection(cardId: string) {
     const current = collection[cardId]?.quantity ?? 0
-    const next = {
+    persistCollection({
       ...collection,
       [cardId]: { quantity: current + 1 },
-    }
-    persistCollection(next)
+    })
   }
 
   function decreaseFromCollection(cardId: string) {
@@ -164,11 +157,10 @@ export default function App() {
       return
     }
 
-    const next = {
+    persistCollection({
       ...collection,
       [cardId]: { quantity: current - 1 },
-    }
-    persistCollection(next)
+    })
   }
 
   async function runSearch(term?: string) {
@@ -232,11 +224,14 @@ export default function App() {
     return (
       <>
         <div className="detail-hero">
-          <img src={card.images.large} alt={card.name} />
+          <img className="detail-card-image" src={card.images.large} alt={card.name} />
 
           <div className="detail-info">
             <div className="title-row">
-              <h2>{card.name}</h2>
+              <div>
+                <p className="section-kicker">Carta</p>
+                <h2>{card.name}</h2>
+              </div>
 
               <button
                 className={
@@ -271,7 +266,7 @@ export default function App() {
 
               {priceInfo ? (
                 <>
-                  <strong>
+                  <strong className="hero-price">
                     {formatUsd(priceInfo.market ?? priceInfo.mid ?? priceInfo.low)}
                   </strong>
 
@@ -280,27 +275,22 @@ export default function App() {
                       <span>Fonte</span>
                       <strong>{priceInfo.source}</strong>
                     </div>
-
                     <div className="price-mini">
                       <span>Variação</span>
                       <strong>{priceInfo.variant}</strong>
                     </div>
-
                     <div className="price-mini">
                       <span>Low</span>
                       <strong>{formatUsd(priceInfo.low)}</strong>
                     </div>
-
                     <div className="price-mini">
                       <span>Mid</span>
                       <strong>{formatUsd(priceInfo.mid)}</strong>
                     </div>
-
                     <div className="price-mini">
                       <span>High</span>
                       <strong>{formatUsd(priceInfo.high)}</strong>
                     </div>
-
                     <div className="price-mini">
                       <span>Market</span>
                       <strong>{formatUsd(priceInfo.market)}</strong>
@@ -308,13 +298,12 @@ export default function App() {
                   </div>
 
                   <p className="price-note">
-                    Preço de referência de mercado. O valor real pode variar
-                    conforme condição, edição e versão da carta.
+                    Preço de referência de mercado. O valor real pode variar conforme condição, edição e versão da carta.
                   </p>
                 </>
               ) : (
                 <>
-                  <strong>Sem preço disponível</strong>
+                  <strong className="hero-price">Sem preço disponível</strong>
                   <p className="price-note">
                     Esta carta não trouxe referência de preço na fonte atual.
                   </p>
@@ -370,30 +359,32 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
-      <header className="topbar">
-        <div className="brand-wrap">
-          <div className="pokeball-dot" />
-          <div>
+    <div className="app-shell premium-theme">
+      <div className="cosmic-bg" />
+
+      <header className="premium-header">
+        <div className="header-inner">
+          <img className="brand-logo" src={LOGO_PATH} alt="Pokeloco" />
+          <div className="brand-copy">
             <h1>Pokeloco</h1>
-            <p>Catálogo de cartas + favoritos + coleção</p>
+            <p>Catálogo premium de cartas, favoritos e coleção</p>
           </div>
         </div>
       </header>
 
-      <main className="layout">
+      <main className="layout premium-layout">
         <section className="sidebar">
-          <div className="panel search-panel">
-            <div className="search-row">
+          <div className="panel premium-panel search-panel">
+            <div className="search-row premium-search-row">
               <input
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Buscar carta..."
               />
-              <button onClick={() => runSearch()}>Buscar</button>
+              <button onClick={() => runSearch()}>{loading ? 'Buscando...' : 'Buscar'}</button>
             </div>
 
-            <div className="tab-row">
+            <div className="tab-row premium-tabs">
               <button
                 className={viewMode === 'browse' ? 'tab active' : 'tab'}
                 onClick={() => setViewMode('browse')}
@@ -418,13 +409,13 @@ export default function App() {
           </div>
 
           {viewMode === 'collection' && (
-            <div className="panel collection-summary">
+            <div className="panel premium-panel collection-summary">
               <span className="meta-label">Valor estimado da coleção</span>
               <strong>{formatUsd(collectionTotal)}</strong>
             </div>
           )}
 
-          <div className="panel list-panel">
+          <div className="panel premium-panel list-panel">
             {loading && <p className="status-text">Carregando cartas...</p>}
             {error && <p className="status-text error">{error}</p>}
 
@@ -448,7 +439,7 @@ export default function App() {
                 return (
                   <button
                     key={card.id}
-                    className={isSelected ? 'catalog-card selected' : 'catalog-card'}
+                    className={isSelected ? 'catalog-card premium-card selected' : 'catalog-card premium-card'}
                     onClick={() => openCard(card)}
                   >
                     <img src={card.images.small} alt={card.name} />
@@ -503,7 +494,7 @@ export default function App() {
         </section>
 
         <section className="detail desktop-detail">
-          <div className="panel detail-panel">
+          <div className="panel premium-panel detail-panel">
             {!selectedCard ? (
               <div className="empty-detail">
                 <p>Selecione uma carta para ver os detalhes.</p>
@@ -521,7 +512,7 @@ export default function App() {
           onClick={() => setMobileDetailOpen(false)}
         >
           <div
-            className="mobile-detail-sheet"
+            className="mobile-detail-sheet premium-sheet"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mobile-detail-top">
@@ -539,4 +530,4 @@ export default function App() {
       )}
     </div>
   )
-      }
+                                                }
