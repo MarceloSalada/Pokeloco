@@ -112,7 +112,7 @@ button {
   inset: 0;
   border-radius: 28px;
   padding: 1px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(38,136,232,0.12));
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(38, 136, 232, 0.12));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
@@ -136,14 +136,14 @@ button {
   padding: 14px 16px;
   border-radius: 18px;
   border: 1px solid var(--line);
-  background: rgba(255,255,255,0.95);
+  background: rgba(255, 255, 255, 0.95);
   outline: none;
   color: var(--text);
 }
 
 .search-row input:focus {
-  border-color: rgba(38,136,232,0.45);
-  box-shadow: 0 0 0 4px rgba(38,136,232,0.12);
+  border-color: rgba(38, 136, 232, 0.45);
+  box-shadow: 0 0 0 4px rgba(38, 136, 232, 0.12);
 }
 
 .search-row button,
@@ -197,14 +197,14 @@ button {
   padding: 12px;
   border-radius: 24px;
   border: 1px solid #dfe5ef;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(247,249,252,0.96) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 249, 252, 0.96) 100%);
   cursor: pointer;
   transition: 0.2s ease;
 }
 
 .catalog-card.selected {
-  border-color: rgba(38,136,232,0.65);
-  box-shadow: 0 0 0 3px rgba(38,136,232,0.12);
+  border-color: rgba(38, 136, 232, 0.65);
+  box-shadow: 0 0 0 3px rgba(38, 136, 232, 0.12);
 }
 
 .catalog-card img {
@@ -306,7 +306,7 @@ button {
   border: 1px solid #e3e8f0;
   border-radius: 22px;
   padding: 15px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(247,249,252,0.96) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 249, 252, 0.96) 100%);
 }
 
 .meta-box strong,
@@ -332,6 +332,39 @@ button {
   display: block;
   font-size: 24px;
   margin-bottom: 8px;
+}
+
+.price-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.price-mini {
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid #e3e8f0;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.price-mini span {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.price-mini strong {
+  font-size: 16px;
+  color: var(--black);
+}
+
+.price-note {
+  margin-top: 8px;
 }
 
 .price-box p,
@@ -453,7 +486,8 @@ button {
     font-size: 30px;
   }
 
-  .meta-grid {
+  .meta-grid,
+  .price-grid {
     grid-template-columns: 1fr;
   }
 
@@ -465,4 +499,4 @@ button {
   .catalog-card img {
     width: 74px;
   }
-}
+  }
