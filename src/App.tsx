@@ -174,26 +174,7 @@ export default function App() {
               </button>
             </div>
 
-            <div className="meta-grid">
-              <div className="meta-box">
-                <span className="meta-label">Set</span>
-                <strong>{card.set.name}</strong>
-              </div>
-              <div className="meta-box">
-                <span className="meta-label">Raridade</span>
-                <strong>{card.rarity || 'Não informada'}</strong>
-              </div>
-              <div className="meta-box">
-                <span className="meta-label">HP</span>
-                <strong>{card.hp || '—'}</strong>
-              </div>
-              <div className="meta-box">
-                <span className="meta-label">Tipo</span>
-                <strong>{card.types?.join(', ') || '—'}</strong>
-              </div>
-            </div>
-
-            <div className="price-box">
+            <div className="price-box price-box-priority">
               <span className="meta-label">Preço de referência</span>
 
               {priceInfo ? (
@@ -239,6 +220,25 @@ export default function App() {
                   </p>
                 </>
               )}
+            </div>
+
+            <div className="meta-grid">
+              <div className="meta-box">
+                <span className="meta-label">Set</span>
+                <strong>{card.set.name}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">Raridade</span>
+                <strong>{card.rarity || 'Não informada'}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">HP</span>
+                <strong>{card.hp || '—'}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">Tipo</span>
+                <strong>{card.types?.join(', ') || '—'}</strong>
+              </div>
             </div>
           </div>
         </div>
@@ -372,4 +372,4 @@ export default function App() {
       )}
     </div>
   )
-              }
+      }
