@@ -577,3 +577,35 @@ button {
     justify-content: flex-end;
   }
   }
+.subtotal-badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 203, 5, 0.16);
+  color: #8a6500 !important;
+  font-weight: 700;
+}
+
+.inline-qty-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.mini-qty-button {
+  border: 1px solid #dfe5ef;
+  background: var(--white);
+  color: var(--black);
+  border-radius: 12px;
+  min-width: 34px;
+  height: 34px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.mini-qty-button.primary {
+  background: linear-gradient(180deg, var(--blue) 0%, var(--blue-deep) 100%);
+  color: var(--white);
+  border: none;
+}
