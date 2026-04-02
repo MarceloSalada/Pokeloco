@@ -156,6 +156,7 @@ export default function App() {
 
   function decreaseFromCollection(cardId: string) {
     const current = collection[cardId]?.quantity ?? 0
+
     if (current <= 1) {
       const next = { ...collection }
       delete next[cardId]
@@ -440,6 +441,9 @@ export default function App() {
                 const isFavorite = favorites.includes(card.id)
                 const isSelected = selectedCard?.id === card.id
                 const quantity = collection[card.id]?.quantity ?? 0
+                const priceInfo = getPriceInfo(card)
+                const subtotal =
+                  (priceInfo?.market ?? priceInfo?.mid ?? priceInfo?.low ?? 0) * quantity
 
                 return (
                   <button
@@ -453,7 +457,33 @@ export default function App() {
                       <strong>{card.name}</strong>
                       <span>{card.set.name}</span>
                       <span>{card.rarity || 'Raridade não informada'}</span>
-                      {quantity > 0 && <span className="quantity-badge">Na coleção: {quantity}</span>}
+
+                      {quantity > 0 && (
+                        <>
+                          <span className="quantity-badge">Na coleção: {quantity}</span>
+                          <span className="subtotal-badge">Subtotal: {formatUsd(subtotal)}</span>
+
+                          {viewMode === 'collection' && (
+                            <div
+                              className="inline-qty-actions"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <button
+                                className="mini-qty-button"
+                                onClick={() => decreaseFromCollection(card.id)}
+                              >
+                                −
+                              </button>
+                              <button
+                                className="mini-qty-button primary"
+                                onClick={() => addToCollection(card.id)}
+                              >
+                                +
+                              </button>
+                            </div>
+                          )}
+                        </>
+                      )}
                     </div>
 
                     <span
@@ -509,4 +539,4 @@ export default function App() {
       )}
     </div>
   )
-}
+      }
