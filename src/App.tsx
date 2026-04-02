@@ -33,12 +33,11 @@ export default function App() {
   const [error, setError] = useState('')
   const [viewMode, setViewMode] = useState<ViewMode>('browse')
   const [favorites, setFavorites] = useState<string[]>([])
+  const [mobileDetailOpen, setMobileDetailOpen] = useState(false)
 
   useEffect(() => {
     const saved = localStorage.getItem(FAVORITES_KEY)
-    if (saved) {
-      setFavorites(JSON.parse(saved))
-    }
+    if (saved) setFavorites(JSON.parse(saved))
   }, [])
 
   useEffect(() => {
@@ -52,11 +51,7 @@ export default function App() {
 
   function toggleFavorite(cardId: string) {
     const exists = favorites.includes(cardId)
-    const next = exists
-      ? favorites.filter((id) => id !== cardId)
-      : [...favorites, cardId]
-
-    persistFavorites(next)
+    persistFavorites(exists ? favorites.filter((id) => id !== cardId) : [...favorites, cardId])
   }
 
   async function runSearch(term?: string) {
@@ -73,11 +68,8 @@ export default function App() {
       const data = await response.json()
       const nextCards = data?.data ?? []
       setCards(nextCards)
-      if (nextCards.length > 0) {
-        setSelectedCard(nextCards[0])
-      } else {
-        setSelectedCard(null)
-      }
+      setSelectedCard(nextCards[0] ?? null)
+      setMobileDetailOpen(false)
     } catch {
       setError('Não foi possível carregar as cartas agora.')
     } finally {
@@ -91,6 +83,76 @@ export default function App() {
     }
     return cards
   }, [cards, favorites, viewMode])
+
+  function openCard(card: PokemonCard) {
+    setSelectedCard(card)
+    setMobileDetailOpen(true)
+  }
+
+  function renderDetail(card: PokemonCard) {
+    return (
+      <>
+        <div className="detail-hero">
+          <img src={card.images.large} alt={card.name} />
+          <div className="detail-info">
+            <div className="title-row">
+              <h2>{card.name}</h2>
+              <button
+                className={favorites.includes(card.id) ? 'favorite-button active' : 'favorite-button'}
+                onClick={() => toggleFavorite(card.id)}
+              >
+                {favorites.includes(card.id) ? 'Favorita' : 'Favoritar'}
+              </button>
+            </div>
+
+            <div className="meta-grid">
+              <div className="meta-box">
+                <span className="meta-label">Set</span>
+                <strong>{card.set.name}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">Raridade</span>
+                <strong>{card.rarity || 'Não informada'}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">HP</span>
+                <strong>{card.hp || '—'}</strong>
+              </div>
+              <div className="meta-box">
+                <span className="meta-label">Tipo</span>
+                <strong>{card.types?.join(', ') || '—'}</strong>
+              </div>
+            </div>
+
+            <div className="price-box">
+              <span className="meta-label">Preço de referência</span>
+              <strong>Próxima etapa</strong>
+              <p>Vamos adicionar fonte, preço médio e faixa de preço da carta na próxima atualização.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="attacks-panel">
+          <h3>Ataques</h3>
+          {card.attacks?.length ? (
+            <div className="attack-list">
+              {card.attacks.map((attack) => (
+                <div key={attack.name} className="attack-card">
+                  <div className="attack-top">
+                    <strong>{attack.name}</strong>
+                    <span>{attack.damage || '—'}</span>
+                  </div>
+                  <p>{attack.text || 'Sem descrição.'}</p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="status-text">Sem ataques informados.</p>
+          )}
+        </div>
+      </>
+    )
+  }
 
   return (
     <div className="app-shell">
@@ -148,7 +210,7 @@ export default function App() {
                   <button
                     key={card.id}
                     className={isSelected ? 'catalog-card selected' : 'catalog-card'}
-                    onClick={() => setSelectedCard(card)}
+                    onClick={() => openCard(card)}
                   >
                     <img src={card.images.small} alt={card.name} />
                     <div className="catalog-card-body">
@@ -172,83 +234,31 @@ export default function App() {
           </div>
         </section>
 
-        <section className="detail">
+        <section className="detail desktop-detail">
           <div className="panel detail-panel">
             {!selectedCard ? (
               <div className="empty-detail">
                 <p>Selecione uma carta para ver os detalhes.</p>
               </div>
             ) : (
-              <>
-                <div className="detail-hero">
-                  <img src={selectedCard.images.large} alt={selectedCard.name} />
-                  <div className="detail-info">
-                    <div className="title-row">
-                      <h2>{selectedCard.name}</h2>
-                      <button
-                        className={
-                          favorites.includes(selectedCard.id)
-                            ? 'favorite-button active'
-                            : 'favorite-button'
-                        }
-                        onClick={() => toggleFavorite(selectedCard.id)}
-                      >
-                        {favorites.includes(selectedCard.id) ? 'Favorita' : 'Favoritar'}
-                      </button>
-                    </div>
-
-                    <div className="meta-grid">
-                      <div className="meta-box">
-                        <span className="meta-label">Set</span>
-                        <strong>{selectedCard.set.name}</strong>
-                      </div>
-                      <div className="meta-box">
-                        <span className="meta-label">Raridade</span>
-                        <strong>{selectedCard.rarity || 'Não informada'}</strong>
-                      </div>
-                      <div className="meta-box">
-                        <span className="meta-label">HP</span>
-                        <strong>{selectedCard.hp || '—'}</strong>
-                      </div>
-                      <div className="meta-box">
-                        <span className="meta-label">Tipo</span>
-                        <strong>{selectedCard.types?.join(', ') || '—'}</strong>
-                      </div>
-                    </div>
-
-                    <div className="price-box">
-                      <span className="meta-label">Preço de referência</span>
-                      <strong>Em breve na V2.1</strong>
-                      <p>
-                        Esta área vai mostrar fonte, market price e faixa de preço da carta.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="attacks-panel">
-                  <h3>Ataques</h3>
-                  {selectedCard.attacks?.length ? (
-                    <div className="attack-list">
-                      {selectedCard.attacks.map((attack) => (
-                        <div key={attack.name} className="attack-card">
-                          <div className="attack-top">
-                            <strong>{attack.name}</strong>
-                            <span>{attack.damage || '—'}</span>
-                          </div>
-                          <p>{attack.text || 'Sem descrição.'}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="status-text">Sem ataques informados.</p>
-                  )}
-                </div>
-              </>
+              renderDetail(selectedCard)
             )}
           </div>
         </section>
       </main>
+
+      {mobileDetailOpen && selectedCard && (
+        <div className="mobile-detail-overlay" onClick={() => setMobileDetailOpen(false)}>
+          <div className="mobile-detail-sheet" onClick={(e) => e.stopPropagation()}>
+            <div className="mobile-detail-top">
+              <button className="mobile-back" onClick={() => setMobileDetailOpen(false)}>
+                ← Voltar
+              </button>
+            </div>
+            {renderDetail(selectedCard)}
+          </div>
+        </div>
+      )}
     </div>
   )
-              }
+                        }
